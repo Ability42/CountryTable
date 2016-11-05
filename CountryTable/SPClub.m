@@ -13,7 +13,7 @@
 static NSString* names[] = {
     @"Barcelona", @"Real Madrid", @"Manchester City",
     @"Arsenal", @"Aston Villa", @"Norvich",
-    @"Bayern M.", @"Borussia D.", @"Dinamo Kiev"
+    @"Bayern M.", @"Borussia D.", @"Dinamo Kiev",
     @"Shakhtar D.", @"Karpaty Lviv", @"Man. United",
     @"Olimpic", @"Beshuktash", @"Atletiko M."
 };
