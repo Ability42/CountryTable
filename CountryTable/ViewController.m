@@ -30,33 +30,21 @@
     return _countriesArray;
 }
 
-#pragma mark - View
-
-- (void)loadView
-{
-    [super loadView];
-    
-    CGRect tableFrame = self.view.bounds;
-    tableFrame.origin = CGPointZero;
-    
-    UITableView *tableView = [[UITableView alloc] initWithFrame:tableFrame style:UITableViewStyleGrouped];
-
-    tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    
-    [self.view addSubview:tableView];
-    
-    self.tableView = tableView;
-
-    
-}
+#pragma mark - View controller life cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
+    [self configureNavBar];
+     
+    [self setupTableView];
+    
+    [self fillTableViewWithTestData];
+    
+    [self.tableView reloadData];
+}
+
+- (void) configureNavBar {
     self.navigationItem.title = @"FC Clubs";
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
@@ -67,10 +55,12 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                target:self
                                                                                action:@selector(addAction:)];
-    self.navigationItem.leftBarButtonItem = addButton;
     
-    
-    /***Test data***/
+    self.navigationItem.leftBarButtonItem = addButton;   
+}
+
+- (void) fillTableViewWithTestData {
+     /***Test data***/
     for (int i = 0; i < arc4random() % 9 + 4; i++) {
         SPCountry *country = [[SPCountry alloc] init];
         country.name = [NSString stringWithFormat:@"Country #%d", i];
@@ -84,11 +74,24 @@
         country.clubs = arrayWithCurrentCountryClubs;
         [self.countriesArray addObject:country];
     }
-    
-    [self.tableView reloadData];
-    
 }
 
+- (void) setupTableView {
+    
+    CGRect tableFrame = self.view.bounds;
+    tableFrame.origin = CGPointZero;
+    
+    UITableView *tableView = [[UITableView alloc] initWithFrame:tableFrame style:UITableViewStyleGrouped];
+    //FIXME: Use layout constraints. they are more reliable (as for me :) )
+    tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    
+    [self.view addSubview:tableView];
+    
+    self.tableView = tableView;   
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -148,7 +151,6 @@
     return (indexPath.row == 0) ? UITableViewCellEditingStyleInsert : UITableViewCellEditingStyleDelete;
 }
     
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -180,7 +182,6 @@
 {
     return @"Remove";
 }
-
 
 #pragma mark - UITableViewDataSource
 
@@ -239,20 +240,16 @@
     return country.name;
 }
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.countriesArray count];
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     SPCountry *country = [self.countriesArray objectAtIndex:section];
     return [country.clubs count];
 }
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -295,26 +292,5 @@
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end
